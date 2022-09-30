@@ -29,7 +29,7 @@ function getPlayerSelection() {
     !selections.includes(playerSelection.toLowerCase())
   ) {
     alert(`'${playerSelection}' is not a valid option.  Try again!`);
-    return getPlayerChoice();
+    return getPlayerSelection();
   } else {
     return playerSelection.toLowerCase();
   }
@@ -41,44 +41,44 @@ function playRound(player, computer) {
   if (player === computer) {
     playerScore["ties"] += 1;
     computerScore["ties"] += 1;
-    console.log(`It's a tie!`);
+    return (`It's a tie!`);
   } else if (player === "rock") {
     switch (computer) {
       case "scissors":
         playerScore["wins"] += 1;
         computerScore["losses"] += 1;
-        console.log(`You won this round!`);
+        return (`You won this round!`);
         break;
       case "paper":
         playerScore["losses"] += 1;
         computerScore["wins"] += 1;
-        console.log(`You lost this round!`);
+        return (`You lost this round!`);
     }
   } else if (player === "paper") {
     switch (computer) {
       case "rock":
         playerScore["wins"] += 1;
         computerScore["losses"] += 1;
-        console.log(`You won this round!`);
+        return (`You won this round!`);
         break;
 
       case "scissors":
         playerScore["losses"] += 1;
         computerScore["wins"] += 1;
-        console.log(`You lost this round!`);
+        return (`You lost this round!`);
     }
   } else if (player === "scissors") {
     switch (computer) {
       case "rock":
         playerScore["looses"] += 1;
         computerScore["wins"] += 1;
-        console.log(`You lost this round!`);
+        return (`You lost this round!`);
         break;
 
       case "paper":
         playerScore["wins"] += 1;
         computerScore["looses"] += 1;
-        console.log(`You won this round!`);
+        return (`You won this round!`);
     }
   }
 }
@@ -92,18 +92,19 @@ function game() {
         computerSelection = getComputerSelection();
         console.log(computerSelection);
         playerSelection = getPlayerSelection();
-        playRound(playerSelection, computerSelection);
-        if (playerScore['wins'] >= 3 || computerScore['wins'] >= 3) {
+        result = playRound(playerSelection, computerSelection);
+        console.log(result);
+        if (playerScore['wins'] >= 5 || computerScore['wins'] >= 5) {
             stillPlaying = false;
         }
     }
 
-  if (playerScore["wins"] === 3) {
+  if (playerScore["wins"] === 5) {
     console.log("YOU WON THE GAME! CONGRATULATIONS!!");
   } else {
     console.log("So sorry, you lost the game.  Better luck next time!");
   }
 }
 
-// playRound(playerSelection, computerSelection);
+
 game();
