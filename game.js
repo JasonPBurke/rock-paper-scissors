@@ -15,6 +15,10 @@ let computerScore = {
   ties: 0,
 };
 
+const btns = document.querySelectorAll(".buttons > button");
+const results = document.querySelector(".results");
+const score = document.querySelector(".score");
+
 // get the computers random selection and return it to be saved
 //TODO: RESEARCH BITWISE OR | OPERATOR TO BETTER UNDERSTAND THE BELOW SOLUTION
 function getComputerSelection() {
@@ -22,17 +26,8 @@ function getComputerSelection() {
 }
 
 // get the players selection and return it to be saved
-function getPlayerSelection() {
-  playerSelection = prompt("Pick your throw!!  Rock, Paper, or Scissors: ");
-  if (
-    playerSelection === null ||
-    !selections.includes(playerSelection.toLowerCase())
-  ) {
-    alert(`'${playerSelection}' is not a valid option.  Try again!`);
-    return getPlayerSelection();
-  } else {
-    return playerSelection.toLowerCase();
-  }
+function getPlayerSelection(searchId) {
+  return searchId.id;
 }
 
 // play game: compare the selections and determine a winner
@@ -41,70 +36,138 @@ function playRound(player, computer) {
   if (player === computer) {
     playerScore["ties"] += 1;
     computerScore["ties"] += 1;
-    return (`It's a tie!`);
+    document.querySelector(
+      ".player > .tie"
+    ).textContent = `ties: ${playerScore["ties"]}`;
+    document.querySelector(
+      ".computer > .tie"
+    ).textContent = `ties: ${computerScore["ties"]}`;
+    results.textContent = `It's a tie!`;
   } else if (player === "rock") {
     switch (computer) {
       case "scissors":
         playerScore["wins"] += 1;
         computerScore["losses"] += 1;
-        return (`You won this round!`);
+        document.querySelector(
+          ".player > .win"
+        ).textContent = `wins: ${playerScore["wins"]}`;
+        document.querySelector(
+          ".computer > .loss"
+        ).textContent = `losses: ${computerScore["losses"]}`;
+        results.textContent = `Rock Beats Scissors!  You won this round!`;
         break;
       case "paper":
         playerScore["losses"] += 1;
         computerScore["wins"] += 1;
-        return (`You lost this round!`);
+        document.querySelector(
+          ".player > .loss"
+        ).textContent = `losses: ${playerScore["losses"]}`;
+        document.querySelector(
+          ".computer > .win"
+        ).textContent = `wins: ${computerScore["wins"]}`;
+        results.textContent = `Rock loses to Paper.  You lost this round!`;
     }
   } else if (player === "paper") {
     switch (computer) {
       case "rock":
         playerScore["wins"] += 1;
         computerScore["losses"] += 1;
-        return (`You won this round!`);
+        document.querySelector(
+          ".player > .win"
+        ).textContent = `wins: ${playerScore["wins"]}`;
+        document.querySelector(
+          ".computer > .loss"
+        ).textContent = `losses: ${computerScore["losses"]}`;
+        results.textContent = `Paper beats Rock! You won this round!`;
         break;
 
       case "scissors":
         playerScore["losses"] += 1;
         computerScore["wins"] += 1;
-        return (`You lost this round!`);
+        document.querySelector(
+          ".player > .loss"
+        ).textContent = `losses: ${playerScore["losses"]}`;
+        document.querySelector(
+          ".computer > .win"
+        ).textContent = `wins: ${computerScore["wins"]}`;
+        results.textContent = `Paper loses to Scissors.  You lost this round!`;
     }
   } else if (player === "scissors") {
     switch (computer) {
       case "rock":
-        playerScore["looses"] += 1;
+        playerScore["losses"] += 1;
         computerScore["wins"] += 1;
-        return (`You lost this round!`);
+        document.querySelector(
+          ".player > .loss"
+        ).textContent = `losses: ${playerScore["losses"]}`;
+        document.querySelector(
+          ".computer > .win"
+        ).textContent = `wins: ${computerScore["wins"]}`;
+        results.textContent = `Scissors loses to Rock.  You lost this round!`;
         break;
 
       case "paper":
         playerScore["wins"] += 1;
-        computerScore["looses"] += 1;
-        return (`You won this round!`);
+        computerScore["losses"] += 1;
+        document.querySelector(
+          ".player > .win"
+        ).textContent = `wins: ${playerScore["wins"]}`;
+        document.querySelector(
+          ".computer > .loss"
+        ).textContent = `losses: ${computerScore["losses"]}`;
+        results.textContent = `Scissors beats Paper!  You won this round!`;
     }
+  } else {
+    console.log("Something went horribly wrong...");
+    return;
   }
+  return;
 }
+
+btns.forEach((btn) => btn.addEventListener("click", () => game(btn)));
+
 
 // repeat the above until the player or computer have won three games
 // output the winner of the game
-function game() {
-    let stillPlaying = true;
-    
-    while(stillPlaying) {
-        computerSelection = getComputerSelection();
-        console.log(computerSelection);
-        playerSelection = getPlayerSelection();
-        result = playRound(playerSelection, computerSelection);
-        console.log(result);
-        if (playerScore['wins'] >= 5 || computerScore['wins'] >= 5) {
-            stillPlaying = false;
-        }
-    }
+function game(btn) {
+  btn.classList.add('playing');
+  playRound(getPlayerSelection(btn), getComputerSelection());
+  btn.addEventListener('transitionend', removeTransition);
 
   if (playerScore["wins"] === 5) {
-    console.log("YOU WON THE GAME! CONGRATULATIONS!!");
-  } else {
-    console.log("So sorry, you lost the game.  Better luck next time!");
+    results.textContent = "YOU WON THE GAME!  CONGRATULATIONS!!";
+    playAgain();
+  } else if (computerScore["wins"] === 5) {
+    results.textContent =
+    "So sorry, you lost the game.  Better luck next time!";
+    playAgain();
   }
 }
 
+function removeTransition(e) {
+  if(e.propertyName !== 'transform') return;
+  this.classList.remove('playing');
+}
 
-game();
+function playAgain() {
+  btns.forEach((btn) => btn.disabled = true);
+  const playAgainBtn = document.querySelector('.play-again');
+  playAgainBtn.classList.remove('hidden');
+  // do these things on click of play again button 
+  // else end the program/ do nothing (rps buttons should be disabled)
+  
+  playAgainBtn.addEventListener('click', () => {
+    btns.forEach((btn) => btn.disabled = false);
+    Object.keys(playerScore).forEach((i) => playerScore[i] = 0);
+    Object.keys(computerScore).forEach((i) => computerScore[i] = 0);
+    document.querySelector(".player > .win").textContent = `wins: 0`;
+    document.querySelector(".computer > .loss").textContent = `losses: 0`;
+    document.querySelector(".player > .loss").textContent = `losses: 0`;
+    document.querySelector(".computer > .win").textContent = `wins: 0`;
+    document.querySelector(".player > .tie").textContent = `ties: 0`;
+    document.querySelector(".computer > .tie").textContent = `ties: 0`;
+    results.textContent = `Let's Go!!!`;
+    playAgainBtn.classList.add('hidden');
+  });
+  
+}

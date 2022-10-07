@@ -1,13 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #5e81ac;">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="game.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="game.js" defer></script>
     <title>Rock Paper Scissors</title>
 </head>
 <body>
+    <h1><img src="img/rock-neon-text.png" alt="rock">
+        <img src="img/paper-neon-text.png" alt="paper">
+        <img src="img/scissors-neon-text.png" alt="scissors">
+    </h1>
+    <div class="buttons">
+
+        <button id="rock"><img src="img/rock-neon-icon.png" alt="hand making rock"></button>
+        <button id="paper"><img src="img/paper-neon-icon.png" alt="hand making paper"></button>
+        <button id="scissors"><img src="img/scissors-neon-icon.png" alt="hand making scissors"></button>
+    </div>
+    <div class="score">
+        <div class="player">Player
+            <ul class="win">wins: 0</ul>
+            <ul class="loss">losses: 0</ul>
+            <ul class="tie">ties: 0</ul>
+        </div>
+        <div class="computer">Computer
+            <ul class="win">wins: 0</ul>
+            <ul class="loss">losses: 0</ul>
+            <ul class="tie">ties: 0</ul>
+        </div>
+    </div>
+    <div class="results">Let's Play!</div>
+    <button class="play-again hidden">Play Again</button>
     
 </body>
 </html>
